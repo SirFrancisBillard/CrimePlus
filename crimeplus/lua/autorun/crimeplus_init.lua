@@ -54,8 +54,8 @@ CrimePlus.PlayerVars = {}
 function CrimePlus.AddIngredient(tab)
 	local ing = {}
 	ing.name = tab.name or "Unknown"
-	ing.id = tab.id or "unknown"
-	ing.class = tab.class or "crimeplus_ingredient_" .. string.lower(ing.name)
+	ing.id = string.lower(tab.id) or string.lower(ing.name) or "unknown"
+	ing.class = tab.class or "crimeplus_ingredient_" .. ing.id
 	ing.price = tab.price or "nope"
 	ing.model = tab.model or "models/error.mdl"
 	ing.max = tab.max or 2
@@ -78,6 +78,46 @@ function CrimePlus.AddIngredient(tab)
 			cmd = ing.cmd
 		})
 	end
+end
+
+function CrimePlus.AddDealer(tab)
+	local dealer = {}
+	dealer.name = tab.name or "Unknown"
+	dealer.id = string.lower(tab.id) or string.lower(dealer.name) or "unknown"
+	dealer.class = tab.class or "crimeplus_dealer_" .. dealer.id
+	dealer.model = tab.model or "models/error.mdl"
+	dealer.anim = tab.anim or "idleall01"
+	DEFINE_BASECLASS("crimeplus_base_dealer")
+	local sent = {
+		Base = "crimeplus_base_dealer",
+		Type = "anim",
+		PrintName = dealer.name,
+		Category = "Crime+ Dealers",
+		Model = dealer.model,
+		DealerData = {Anim = dealer.anim}
+	}
+	scripted_ents.Register(sent, dealer.class)
+end
+
+function CrimePlus.AddMarketItem(tab)
+	local item = {}
+	item.name = tab.name or "Unknown"
+	item.id = string.lower(tab.id) or string.lower(item.name) or "unknown"
+	item.class = tab.class or "crimeplus_item_" .. item.id
+	item.price = tab.price or "nope"
+	item.model = tab.model or "models/error.mdl"
+	item.dealer = tab.dealer or "crimeplus_dealer_drug"
+	item.color = tab.color or Color(255, 0, 0)
+	DEFINE_BASECLASS("crimeplus_base_market")
+	local sent = {
+		Base = "crimeplus_base_market",
+		Type = "anim",
+		PrintName = item.name,
+		Category = "Crime+ Goods",
+		Model = item.model,
+		MarketData = {Price = item.price, Dealer = item.dealer, Color = item.color}
+	}
+	scripted_ents.Register(sent, item.class)
 end
 
 function CrimePlus.SetGrowthModel(ent, plant, stage)
