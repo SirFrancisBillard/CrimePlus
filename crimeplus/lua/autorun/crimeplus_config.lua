@@ -1,3 +1,5 @@
+if not CRIMEPLUS_LOADING then return end
+
 -- Crime+ Configuration File
 
 -- Weed

@@ -1,3 +1,5 @@
+if not CRIMEPLUS_LOADING then return end
+
 -- Plant enumerations
 -- Used for retrieving growth models and bodygroups
 CRIMEPLUS_PLANT_WEED = 0

@@ -2,8 +2,12 @@ AddCSLuaFile()
 
 CrimePlus = {Config = {}}
 
+CRIMEPLUS_LOADING = true
+
 include("crimeplus_config.lua")
 include("crimeplus_enums.lua")
+
+CRIMEPLUS_LOADING = false
 
 CrimePlus.Models = {
 	-- Generic models
