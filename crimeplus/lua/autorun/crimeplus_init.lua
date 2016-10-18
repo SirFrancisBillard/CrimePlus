@@ -13,11 +13,7 @@ CrimePlus.Models = {
 	["Gas can"] = "models/props_junk/metalgascan.mdl",
 	["Fertilizer"] = "models/props_junk/plasticbucket001a.mdl",
 	["Drying rack"] = "models/props_wasteland/kitchen_shelf001a.mdl",
-	["Grinder"] = "model",
-	["thing"] = "model",
-	["thing"] = "model",
-	["thing"] = "model",
-	["thing"] = "model",
+	["Grinder"] = "models/props_junk/MetalBucket02a.mdl",
 
 	-- Weed models
 	["Weed pot"] = "models/nater/weedplant_pot.mdl",
@@ -31,14 +27,11 @@ CrimePlus.Models = {
 	["Weed stage 6"] = "models/nater/weedplant_pot_growing6.mdl",
 	["Weed stage 7"] = "models/nater/weedplant_pot_growing7.mdl",
 	["Weed bag"] = "models/katharsmodels/contraband/zak_wiet/zak_wiet.mdl",
-	["thing"] = "model",
-	["thing"] = "model",
 
 	-- Cocaine models
 	["Coca plant"] = "models/srcocainelab/cocaplant.mdl",
 	["Cocaine brick"] = "models/srcocainelab/cocainebrick.mdl",
 	["Cocaine bag"] = "models/srcocainelab/ziplockedcocaine.mdl",
-	["thing"] = "model",
 
 	-- Meth models
 	["Ephedrine"] = "models/meth_mod/ephedrine/ephedrine.mdl",
