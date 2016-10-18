@@ -6,6 +6,7 @@ CRIMEPLUS_LOADING = true
 
 include("crimeplus_config.lua")
 include("crimeplus_enums.lua")
+include("crimeplus_meta.lua")
 
 CRIMEPLUS_LOADING = false
 
