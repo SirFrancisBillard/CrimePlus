@@ -68,7 +68,7 @@ function CrimePlus.AddIngredient(tab)
 		Model = ing.model
 	}
 	scripted_ents.Register(sent, ing.class)
-	if ing.price ~= "nope" then
+	if ing.price ~= "nope" and type(DarkRP.createEntity) == "function" then
 		DarkRP.createEntity(ing.name, {
 			ent = ing.class,
 			model = ing.model,
