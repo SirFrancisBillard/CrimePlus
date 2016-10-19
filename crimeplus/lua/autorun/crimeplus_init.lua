@@ -21,6 +21,7 @@ CrimePlus.Models = {
 	["Grinder"] = "models/props_junk/MetalBucket02a.mdl",
 
 	-- Weed models
+	["Weed seed"] = "models/nater/weedplant_pot.mdl",
 	["Weed pot"] = "models/nater/weedplant_pot.mdl",
 	["Weed pot soil"] = "models/nater/weedplant_pot_dirt.mdl",
 	["Weed pot planted"] = "models/nater/weedplant_pot_planted.mdl",
@@ -60,9 +61,10 @@ function CrimePlus.AddIngredient(tab)
 	ing.model = tab.model or "models/error.mdl"
 	ing.max = tab.max or 2
 	ing.cmd = tab.cmd or "buy" .. ing.id
-	DEFINE_BASECLASS("crimeplus_base_ingredient")
+	ing.category = tab.category or "Other"
+	DEFINE_BASECLASS("crimeplus_base")
 	local sent = {
-		Base = "crimeplus_base_ingredient",
+		Base = "crimeplus_base",
 		Type = "anim",
 		PrintName = ing.name,
 		Category = "Crime+ Ingredients",
@@ -76,6 +78,7 @@ function CrimePlus.AddIngredient(tab)
 			model = ing.model,
 			price = ing.price,
 			max = ing.max,
+			category = ing.category,
 			cmd = ing.cmd
 		})
 	end
