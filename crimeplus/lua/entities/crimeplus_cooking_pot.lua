@@ -2,23 +2,18 @@ AddCSLuaFile()
 
 ENT.Base = "crimeplus_base"
 ENT.Type = "anim"
-ENT.PrintName = "Weed Pot"
+ENT.PrintName = "Cooking Pot"
 ENT.Category = "Crime+"
 ENT.Spawnable = true
-ENT.Model = CrimePlus.Models["Weed pot"]
+ENT.Model = CrimePlus.Models["Cooking pot"]
 
 function ENT:Initialize()
 	self.BaseClass.Initialize(self)
-	self:SetStage(0)
+	self:SetCooking(false)
 end
 
 function ENT:SetupDataTables()
-	self:NetworkVar("Int", 0, "Stage")
-	self:NetworkVar("Bool", 0, "Fertilizer")
-	self:NetworkVar("Bool", 1, "Soil")
-	self:NetworkVar("Bool", 2, "Water")
-	self:NetworkVar("Bool", 3, "Seed")
-	self:NetworkVar("Bool", 4, "Growing")
+	self:NetworkVar("Bool", 0, "Cooking")
 end
 
 if SERVER then

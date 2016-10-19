@@ -10,7 +10,3 @@ ENT.Model = CrimePlus.Models["Drying rack"]
 function ENT:Initialize()
 	self.BaseClass.Initialize(self)
 end
-
-if SERVER then
-	
-end

@@ -11,6 +11,8 @@ function ENT:Initialize()
 	self.BaseClass.Initialize(self)
 	self:SetProgress(0)
 	self:SetDry(false)
+	self:SetMaterial(Material("models/antlion/antlion_innards"))
+	self:SetColor(Color(0, 58, 12))
 end
 
 function ENT:SetupDataTables()
@@ -34,5 +36,15 @@ if SERVER then
 			ent:SetWeed(ent:GetWeed() + 1)
 			SafeRemoveEntity(self)
 		end
+	end
+	function ENT:Think()
+		self:SetMaterial(Material("models/antlion/antlion_innards"))
+		if self:GetDry() then
+			self:SetColor(Color(0, 240, 50))
+		else
+			self:SetColor(Color(0, 58, 12))
+		end
+		self:NextThink(CurTime() + 0.1)
+		return true
 	end
 end
