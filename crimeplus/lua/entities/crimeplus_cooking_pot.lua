@@ -48,13 +48,26 @@ self.Recipes = {
 function ENT:Initialize()
 	self.BaseClass.Initialize(self)
 	self.Cooking = false
+	self.CookingEndTime = CurTime() + 90
+	self.CookingStartTime = CurTime()
+	self.WhatIsCooking = "you, stupid"
 	self.Ingredients = {}
 end
 
 if SERVER then
 	function ENT:Touch(ent)
-		if IsValid(ent) and ent.IsValidStove and ent:HasFuel() and self.Cooldown <= CurTime() then
-			if not self.Cooking then
+		if IsValid(ent) and ent.IsValidStove and ent:HasFuel() and self.Cooldown <= CurTime() and then
+			if self.Cooking then
+				if self.CookingEndTime <= CurTime() then
+					self.Cooking = false
+					for k2, v2 in pairs(self.Recipes[self.WhatIsCooking][needs]) do
+						self.Ingredients[k2] = self.Ingredients[k2] - v2
+					end
+					local product = ents.Create(k)
+					product:SetPos(self:GetPos() + Vector(0, 0, 12))
+					product:Spawn()
+				end
+			else
 				for k, v in pairs(self.Recipes) do
 					local good = true
 					for k2, v2 in pairs(v.needs) do
@@ -65,19 +78,13 @@ if SERVER then
 					if good then
 						self.Cooking = true
 						self.WhatIsCooking = k
-						timer.Simple(v.time, function()
-							if not IsValid(self) then return end
-							for k2, v2 in pairs(v.needs) do
-								self.Ingredients[k2] = self.Ingredients[k2] - v2
-							end
-							local product = ents.Create(k)
-							product:SetPos(self:GetPos() + Vector(0, 0, 12))
-							product:Spawn()
-						end)
+						self.CookingStartTime = CurTime()
+						self.CookingEndTime = CurTime() + v.time
+						break
 					end
 				end
 			end
-			self.Cooldown = CurTime() + 1
+			self.Cooldown = CurTime() + 0.2
 		end
 	end
 	function ENT:StartTouch(ent)
