@@ -45,9 +45,14 @@ self.Recipes = {
 	}
 }
 
+function ENT:SetupDataTables()
+	-- The client needs to know these for the display to function
+	self:NetworkVar("Bool", 0, "Cooking")	
+end
+
 function ENT:Initialize()
 	self.BaseClass.Initialize(self)
-	self.Cooking = false
+	self:SetCooking(false)
 	self.CookingEndTime = CurTime() + 90
 	self.CookingStartTime = CurTime()
 	self.WhatIsCooking = "you, stupid"
@@ -57,13 +62,13 @@ end
 if SERVER then
 	function ENT:Touch(ent)
 		if IsValid(ent) and ent.IsValidStove and ent:HasFuel() and self.Cooldown <= CurTime() and then
-			if self.Cooking then
+			if self:GetCooking() then
 				if self.CookingEndTime <= CurTime() then
-					self.Cooking = false
-					for k2, v2 in pairs(self.Recipes[self.WhatIsCooking][needs]) do
-						self.Ingredients[k2] = self.Ingredients[k2] - v2
+					self:SetCooking(false)
+					for k, v in pairs(self.Recipes[self.WhatIsCooking][needs]) do
+						self.Ingredients[k] = math.max(self.Ingredients[k] - v, 0)
 					end
-					local product = ents.Create(k)
+					local product = ents.Create(self.WhatIsCooking)
 					product:SetPos(self:GetPos() + Vector(0, 0, 12))
 					product:Spawn()
 				end
@@ -73,10 +78,11 @@ if SERVER then
 					for k2, v2 in pairs(v.needs) do
 						if self.Ingredients[k2] < v2 then
 							good = false
+							break
 						end
 					end
 					if good then
-						self.Cooking = true
+						self:SetCooking(true)
 						self.WhatIsCooking = k
 						self.CookingStartTime = CurTime()
 						self.CookingEndTime = CurTime() + v.time
