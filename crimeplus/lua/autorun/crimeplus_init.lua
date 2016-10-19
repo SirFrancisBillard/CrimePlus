@@ -66,6 +66,7 @@ function CrimePlus.AddIngredient(tab)
 		Type = "anim",
 		PrintName = ing.name,
 		Category = "Crime+ Ingredients",
+		Spawnable = true,
 		Model = ing.model
 	}
 	scripted_ents.Register(sent, ing.class)
@@ -93,6 +94,7 @@ function CrimePlus.AddDealer(tab)
 		Type = "anim",
 		PrintName = dealer.name,
 		Category = "Crime+ Dealers",
+		Spawnable = true,
 		Model = dealer.model,
 		DealerData = {Anim = dealer.anim}
 	}
@@ -114,6 +116,7 @@ function CrimePlus.AddMarketItem(tab)
 		Type = "anim",
 		PrintName = item.name,
 		Category = "Crime+ Goods",
+		Spawnable = true,
 		Model = item.model,
 		MarketData = {Price = item.price, Dealer = item.dealer, Color = item.color}
 	}
