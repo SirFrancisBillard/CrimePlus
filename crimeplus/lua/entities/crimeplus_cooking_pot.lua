@@ -7,73 +7,86 @@ ENT.Category = "Crime+"
 ENT.Spawnable = true
 ENT.Model = CrimePlus.Models["Cooking pot"]
 
+self.Recipes = {
+	["crimeplus_meth"] = {
+		time = CrimePlus.Config["Meth cook time"],
+		needs = {
+			["ephedrine"] = 1,
+			["red phosphorus"] = 1,
+			["iodine"] = 1,
+			["hydrochloric acid"] = 1,
+			["ether"] = 1,
+			["ammonia"] = 1,
+			["sodium hydroxide"] = 1
+		}
+	},
+	["crimeplus_cocaine"] = {
+		time = CrimePlus.Config["Cocaine cook time"],
+		needs = {
+			["coca paste"] = 1,
+			["caustic soda"] = 1
+		}
+	},
+	["crimeplus_crack"] = {
+		time = CrimePlus.Config["Crack cook time"],
+		needs = {
+			["cocaine"] = 1,
+			["baking soda"] = 1
+		}
+	},
+	["crimeplus_heroin"] = {
+		time = CrimePlus.Config["Heroin cook time"],
+		needs = {
+			["opium"] = 3,
+			["water"] = 2,
+			["baking soda"] = 1,
+			["vinegar"] = 1
+		}
+	}
+}
+
 function ENT:Initialize()
 	self.BaseClass.Initialize(self)
-	self:SetCooking(false)
-end
-
-function ENT:SetupDataTables()
-	self:NetworkVar("Bool", 0, "Cooking")
+	self.Cooking = false
+	self.Ingredients = {}
 end
 
 if SERVER then
+	function ENT:Touch(ent)
+		if IsValid(ent) and ent.IsValidStove and ent:HasFuel() and self.Cooldown <= CurTime() then
+			if not self.Cooking then
+				for k, v in pairs(self.Recipes) do
+					local good = true
+					for k2, v2 in pairs(v.needs) do
+						if self.Ingredients[k2] < v2 then
+							good = false
+						end
+					end
+					if good then
+						self.Cooking = true
+						self.WhatIsCooking = k
+						timer.Simple(v.time, function()
+							if not IsValid(self) then return end
+							for k2, v2 in pairs(v.needs) do
+								self.Ingredients[k2] = self.Ingredients[k2] - v2
+							end
+							local product = ents.Create(k)
+							product:SetPos(self:GetPos() + Vector(0, 0, 12))
+							product:Spawn()
+						end)
+					end
+				end
+			end
+			self.Cooldown = CurTime() + 1
+		end
+	end
 	function ENT:StartTouch(ent)
-		if ent:GetClass() == "crimeplus_ingredient_soil" and not self:GetSoil() then
-			SafeRemoveEntity(ent)
-			self:SetSoil(true)
-		end
-		if ent:GetClass() == "crimeplus_ingredient_fertilizer" and not self:Growing() and not self:GetFertilizer() and self:GetSoil() then
-			SafeRemoveEntity(ent)
-			self:SetFertilizer(true)
-		end
-		if ent:GetClass() == "crimeplus_ingredient_water" and not self:GetWater() and self:GetSoil() then
-			SafeRemoveEntity(ent)
-			self:SetWater(true)
-		end
-		if ent:GetClass() == "crimeplus_ingredient_weedseed" and not self:GetSeed() and self:GetSoil() then
-			SafeRemoveEntity(ent)
-			self:SetSeed(true)
-		end
-	end
-	function ENT:Think()
-		if self:GetSoil() and self:GetSeed() and self:GetWater() and not self:GetGrowing() then
-			self:SetGrowing(true)
-			self.GrowTime = CrimePlus.Config["Weed grow time"]
-			if self:GetFertilizer() then
-				self.GrowTime = CrimePlus.Config["Weed grow time with fertilizer"]
+		if IsValid(ent) and ent.CookingPotIngredient then
+			if self.Ingredients[ent.CookingPotIngredient] then
+				self.Ingredients[ent.CookingPotIngredient] = self.Ingredients[ent.CookingPotIngredient] + 1
+			else
+				self.Ingredients[ent.CookingPotIngredient] = 1
 			end
-			self.Interval = math.floor(self.GrowTime / 7)
-			for i = 1, 7, self.Interval do
-				timer.Simple(self.Interval * i, function()
-					if not IsValid(self) then return end
-					self:SetStage(math.Clamp(self:GetStage() + 1, 1, 7))
-				end)
-			end
-		end
-		if self:GetStage() < 1 then
-			if self:GetSoil() and not self:GetSeed() then
-				self:SetModel(CrimePlus.Models["Weed pot soil"])
-			elseif self:GetSoil() and self:GetSeed() then
-				self:SetModel(CrimePlus.Models["Weed pot planted"])
-			elseif not self:GetSoil() then
-				self:SetModel(CrimePlus.Models["Weed pot"])
-			end
-		else
-			self:SetModel(CrimePlus.Models["Weed stage " .. self:GetStage()])
-		end
-		self:NextThink(CurTime() + 0.1)
-		return true
-	end
-	function ENT:Use(activator, caller)
-		if IsValid(caller) and caller:IsPlayer() and self:GetStage() == 7 then
-			self:SetGrowing(false)
-			self:SetFertilizer(false)
-			self:SetWater(false)
-			self:SetSeed(false)
-			self:SetStage(1)
-			local weed = ents.Create("crimeplus_weed")
-			weed:SetPos(self:GetPos() + Vector(0, 0, 16))
-			weed:Spawn()
 		end
 	end
 end
