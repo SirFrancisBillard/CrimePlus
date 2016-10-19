@@ -105,6 +105,23 @@ function CrimePlus.AddDealer(tab)
 	scripted_ents.Register(sent, dealer.class)
 end
 
+function CrimePlus.AddUselessItem(tab)
+	local item = {}
+	item.name = tab.name or "Unknown"
+	item.class = tab.class or "crimeplus_item_unknown"
+	item.model = tab.model or "models/error.mdl"
+	DEFINE_BASECLASS("crimeplus_base")
+	local sent = {
+		Base = "crimeplus_base_market",
+		Type = "anim",
+		PrintName = item.name,
+		Category = "Crime+",
+		Spawnable = true,
+		Model = item.model
+	}
+	scripted_ents.Register(sent, item.class)
+end
+
 function CrimePlus.AddMarketItem(tab)
 	local item = {}
 	item.name = tab.name or "Unknown"
