@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 ENT.Base = "crimeplus_base"
 ENT.Type = "anim"
-ENT.PrintName = "Cooking Pot"
+ENT.PrintName = "Jar"
 ENT.Category = "Crime+"
 ENT.Spawnable = true
 ENT.Model = CrimePlus.Models["Jar"]
