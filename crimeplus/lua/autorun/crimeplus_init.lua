@@ -144,6 +144,13 @@ function CrimePlus.AddMarketItem(tab)
 	scripted_ents.Register(sent, item.class)
 end
 
+function CrimePlus.RegisterPotIngredient(class, name)
+	local sent = scripted_ents.Get(class)
+	if not sent then return end
+	sent.CookingPotIngredient = name
+	scripted_ents.Register(sent, class)
+end
+
 function CrimePlus.SetGrowthModel(ent, plant, stage)
 	if not IsValid(ent) then return end
 	if plant == CRIMEPLUS_PLANT_WEED then
